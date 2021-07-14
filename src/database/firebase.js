@@ -2,12 +2,12 @@ import firebase from "firebase/app";
 import 'firebase/firestore';
 
 const firebaseConfig = {
-  apiKey: "AIzaSyD4lNiOzs2gWuvqM8r0XsP0C1LdwN7RKtM",
-  authDomain: "aloha-chat-01-e0903.firebaseapp.com",
-  projectId: "aloha-chat-01-e0903",
-  storageBucket: "aloha-chat-01-e0903.appspot.com",
-  messagingSenderId: "554904837138",
-  appId: "1:554904837138:web:9e4c01bb2a2210cd9f4ccb"
+  apiKey: process.env.REACT_APP_API_KEY,
+  authDomain: process.env.REACT_APP_AUTH_DOMAIN,
+  projectId: process.env.REACT_APP_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_MESSAGEING_SENDER_ID,
+  appId: process.env.REACT_APP_APPID
 };
 
   const firebaseApp = firebase.initializeApp(firebaseConfig);

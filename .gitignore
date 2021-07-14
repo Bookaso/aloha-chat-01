@@ -29,6 +29,7 @@ firebase-error.log*
 .firebase/*
 __generated__
 .DS_Store
+.env
 .env.local
 .env.*.local
 .eslintcache

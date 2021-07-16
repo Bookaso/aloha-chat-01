@@ -1,10 +1,12 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
 
 const MessageText = (props) => {
   const [text, setText] = useState("");
   const [isFocus, setIsFocus] = useState(true);
+  const inputBox = useRef();
+
   function handleInput(e) {
     if (text) {
       e.preventDefault();
@@ -13,6 +15,13 @@ const MessageText = (props) => {
     }
   }
 
+  useEffect(()=>{
+    inputBox.current.addEventListener("keydown",((e)=>{
+      if (e.keyCode === 13 && !e.shiftKey) {
+        e.preventDefault();
+      }
+    }))
+  },[])
   return (
     <InputContainer>
       {isFocus ? (
@@ -24,7 +33,7 @@ const MessageText = (props) => {
         <Icon icon="angle-right" />
       )}
       <InputText
-        id="send"
+        ref={inputBox}
         placeholder="Say somthing"
         value={text}
         onChange={(e) => {
@@ -59,7 +68,7 @@ const InputText = styled.textarea`
 
 const InputContainer = styled.div`
   height: 5vh;
-  width: 70vw;
+  width: 80vw;
   border-radius: 0 0 20px 20px;
   background: rgba(134, 84, 57, 0.5);
   backdrop-filter: blur(10px);

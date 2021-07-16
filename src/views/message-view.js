@@ -52,7 +52,7 @@ const MessageView = (props) => {
 const MsgField = styled.div`
   background: #fff;
   height: 70vh;
-  width: 70vw;
+  width: 80vw;
   background: rgba(255, 255, 255, 0.8);
   backdrop-filter: blur(10px);
   display: flex;

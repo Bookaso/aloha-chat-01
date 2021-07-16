@@ -1,5 +1,6 @@
-import React from "react";
+import React,{useState} from "react";
 import styled from "styled-components";
+import { Sidebar } from "semantic-ui-react";
 
 //import database
 import firestore from "../database/firebase";
@@ -9,33 +10,42 @@ import firebase from "firebase/app";
 import MessageView from "./message-view";
 import MessageText from "../components/message-field";
 import MessageHeader from "./messageHeader";
+import Userlist from "../components/userlists";
 
 function Chat(props) {
   const { user } = props;
-  console.log(user.id);
+  const [isShow, setIsShow] = useState(false);
+
+  function IsShow() {
+    setIsShow((prev) => !prev)
+  }
 
   function handleInput(text) {
     const messageRef = firestore.collection("message");
-    messageRef.add({
-          user: user,
-          text: text,
-          time: firebase.firestore.Timestamp.now().toMillis(),
-        })
-        .then(()=>{
-          console.log("send");
-        })
+    messageRef
+      .add({
+        user: user,
+        text: text,
+        time: firebase.firestore.Timestamp.now().toMillis(),
+      })
+      .then(() => {
+        console.log("send");
+      });
   }
 
   return (
     <Chatbase>
-      <MessageHeader handleEnter={props.handleEnter} />
-      <MessageView currentUser = {user}/>
+      <Userlist isShow={isShow}/>
+      <Sidebar.Pusher>
+      <MessageHeader handleEnter={props.handleEnter} isShow={IsShow}/>
+      <MessageView currentUser={user} />
       <MessageText handleInput={handleInput} />
+      </Sidebar.Pusher>
     </Chatbase>
   );
 }
 
-const Chatbase = styled.div`
+const Chatbase = styled(Sidebar.Pushable)`
   min-height: 80vh;
   min-width: 80vw;
   background-color: rgba(215, 177, 157, 0.4);
@@ -45,6 +55,8 @@ const Chatbase = styled.div`
   flex-direction: column;
   padding: 5px;
   align-items: center;
+  overflow: hidden;
 `;
+
 
 export default Chat;

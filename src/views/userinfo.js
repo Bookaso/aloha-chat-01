@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { Image } from "semantic-ui-react";
+import { Image, Progress } from "semantic-ui-react";
 //import database
 import firestore from "../database/firebase";
 
@@ -10,6 +10,7 @@ const SelectionAvatar = (props) => {
   const { userId } = props;
   const [isEnter, setIsEnter] = useState(true);
   const [isGet, setIsGet] = useState(true);
+  const [percentage, setPercentage] = useState(20);
   const [user, setUser] = useState({
     id: "",
     userName: "",
@@ -21,10 +22,14 @@ const SelectionAvatar = (props) => {
   }
 
   function handleLogout() {
-    props.logout(userId)
+    props.logout(userId);
   }
 
   useEffect(() => {
+    const load = setInterval(() => {
+      setPercentage((prev) => prev + 1);
+    }, 30);
+
     const userRef = firestore.collection("users");
     userRef
       .doc(userId)
@@ -34,17 +39,27 @@ const SelectionAvatar = (props) => {
           id: resUser.id,
           userName: resUser.data().userName,
           Avatar: resUser.data().photoURL,
-          time:resUser.data().time,
+          time: resUser.data().time,
         });
-        setIsGet(false);
+        clearInterval(load);
       });
+
+
+    if (user) {
+      setPercentage(100);
+    }
+
+    setTimeout(() => {
+      setIsGet(false);
+      setPercentage(20);
+    }, 500);
   }, [isGet]);
   return (
     <>
       {isEnter ? (
         <UserInfo>
           {isGet ? (
-            "Loading..."
+            <ProcessBar percent={percentage} inverted progress success />
           ) : (
             <>
               <Avatar src={user.Avatar} />
@@ -63,7 +78,7 @@ const SelectionAvatar = (props) => {
 const UserInfo = styled.div`
   min-height: 80vh;
   min-width: 80vw;
-  font-family: 'Ubuntu';
+  font-family: "Ubuntu";
   background-color: rgba(215, 177, 157, 0.4);
   backdrop-filter: blur(10px);
   border-radius: 20px;
@@ -79,6 +94,9 @@ const Avatar = styled(Image)`
   height: 10rem;
 `;
 
+const ProcessBar = styled(Progress)`
+  width: 200px;
+`;
 const Namebox = styled.div`
   height: 2rem;
   border: none;

@@ -1,28 +1,42 @@
-import React,{useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Button } from "semantic-ui-react";
 
-import firestore from '../database/firebase'
-import { green } from "@material-ui/core/colors";
+import firestore from "../database/firebase";
 
 const MessageHeader = (props) => {
   const [onlineUser, setOnlineUser] = useState(0);
 
+  function IsShow() {
+    props.isShow();
+  }
+
   useEffect(() => {
     const userRef = firestore.collection("users");
-    userRef.onSnapshot((querySanpshot)=>{
-        let length = querySanpshot.docs.length
-        setOnlineUser(length)
-      })
-  }, [])
+    userRef.onSnapshot((querySanpshot) => {
+      let length = querySanpshot.docs.length;
+      setOnlineUser(length);
+    });
+  }, []);
 
   return (
     <HeaderContainer>
       <Logo>CHAT</Logo>
-      {onlineUser ? <Logo>Online {onlineUser}</Logo> : null}
+      {onlineUser ? (
+        <Button
+          compact
+          animated="vertical"
+          color={onlineUser > 1 ? "green" : "red"}
+          onClick={IsShow}
+        >
+          <Button.Content visible>Online {onlineUser} users</Button.Content>
+          <Button.Content hidden>Show {onlineUser} users</Button.Content>
+        </Button>
+      ) : null}
       <Back onClick={props.handleEnter}>
-      <Icon icon="arrow-circle-left" />
-      BACK
+        <Icon icon="arrow-circle-left" />
+        BACK
       </Back>
     </HeaderContainer>
   );
@@ -30,7 +44,7 @@ const MessageHeader = (props) => {
 
 const HeaderContainer = styled.div`
   height: 5vh;
-  width: 70vw;
+  width: 80vw;
   border-radius: 20px 20px 0 0;
   background: rgba(134, 84, 57, 0.5);
   overflow: hidden;

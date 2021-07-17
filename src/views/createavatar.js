@@ -62,9 +62,7 @@ const CreateAvatar = (props) => {
       })
       .then((resId) => {
         setUserId(resId.id);
-        setTimeout(() => {
-          setIsAdded(false);
-        }, 300);
+        setIsAdded(false);
       });
   };
 

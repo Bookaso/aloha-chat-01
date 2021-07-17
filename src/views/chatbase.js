@@ -1,6 +1,7 @@
 import React,{useState} from "react";
 import styled from "styled-components";
 import { Sidebar } from "semantic-ui-react";
+import { useIdleTimer } from 'react-idle-timer'
 
 //import database
 import firestore from "../database/firebase";
@@ -15,6 +16,7 @@ import Userlist from "../components/userlists";
 function Chat(props) {
   const { user } = props;
   const [isShow, setIsShow] = useState(false);
+  const [time, setTime] = useState(8000);
 
   function IsShow() {
     setIsShow((prev) => !prev)
@@ -33,6 +35,20 @@ function Chat(props) {
       });
   }
 
+  function handleIdle() {
+    props.handleEnter()
+    props.handleLogout()
+  }
+
+  function resetTime() {
+    setTime(8000)
+  }
+  useIdleTimer({
+    timeout: time,
+    onIdle:handleIdle,
+    onAction:resetTime,
+    onActive:resetTime,
+  })
   return (
     <Chatbase>
       <Userlist isShow={isShow}/>

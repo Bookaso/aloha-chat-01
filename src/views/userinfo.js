@@ -70,7 +70,7 @@ const SelectionAvatar = (props) => {
           )}
         </UserInfo>
       ) : (
-        <Chat handleEnter={handleEnter} user={user} />
+        <Chat handleEnter={handleEnter} handleLogout={handleLogout} user={user} />
       )}
     </>
   );

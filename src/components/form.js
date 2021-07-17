@@ -62,8 +62,8 @@ const Alert = styled.h4`
   border-radius: 5px;
   text-align: center;
   position: absolute;
-  bottom: 14rem;
-  right: 27vw;
+  bottom: 24rem;
+  right: 33vw;
 `;
 const Button = styled.button`
   background: rgba(64, 34, 24, 1);

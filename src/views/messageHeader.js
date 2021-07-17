@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Button } from "semantic-ui-react";
 
 import firestore from "../database/firebase";
 
@@ -23,17 +22,9 @@ const MessageHeader = (props) => {
   return (
     <HeaderContainer>
       <Logo>CHAT</Logo>
-      {onlineUser ? (
-        <Button
-          compact
-          animated="vertical"
-          color={onlineUser > 1 ? "green" : "red"}
-          onClick={IsShow}
-        >
-          <Button.Content visible>Online {onlineUser} users</Button.Content>
-          <Button.Content hidden>Show {onlineUser} users</Button.Content>
-        </Button>
-      ) : null}
+        <BTN onlineUser={onlineUser} onClick={IsShow}>
+          Online {onlineUser} users
+        </BTN>
       <Back onClick={props.handleEnter}>
         <Icon icon="arrow-circle-left" />
         BACK
@@ -63,6 +54,18 @@ const Back = styled.div`
 const Logo = styled.div`
   height: 100%;
   width: 40%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 500;
+`;
+
+const BTN = styled.button`
+  height: 50%;
+  color: #fff;
+  border: none;
+  background: ${(props) => (props.onlineUser > 1 ? "rgb(0,100,0)": "red")};
+  font-size: 1.2rem;
   display: flex;
   justify-content: center;
   align-items: center;

@@ -16,7 +16,7 @@ import Userlist from "../components/userlists";
 function Chat(props) {
   const { user } = props;
   const [isShow, setIsShow] = useState(false);
-  const [time, setTime] = useState(8000);
+  const [time, setTime] = useState(1000*60*30);
 
   function IsShow() {
     setIsShow((prev) => !prev)
@@ -41,7 +41,7 @@ function Chat(props) {
   }
 
   function resetTime() {
-    setTime(8000)
+    setTime(1000*60*30)
   }
   useIdleTimer({
     timeout: time,

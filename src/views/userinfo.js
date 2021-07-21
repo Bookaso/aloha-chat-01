@@ -1,12 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useContext } from "react";
 import styled from "styled-components";
 import { Image, Progress } from "semantic-ui-react";
 //import database
-import firestore from "../database/firebase";
 
+import firestore from "../database/firebase";
+import { UserContext } from "../Context/usercontext";
 import Chat from "./chatbase";
 
 const SelectionAvatar = (props) => {
+  const [state, dispath] = useContext(UserContext);
+  
   const { userId } = props;
   const [isEnter, setIsEnter] = useState(true);
   const [isGet, setIsGet] = useState(true);
@@ -22,27 +25,29 @@ const SelectionAvatar = (props) => {
   }
 
   function handleLogout() {
-    props.logout(userId);
+    props.logout();
   }
 
   useEffect(() => {
     const load = setInterval(() => {
       setPercentage((prev) => prev + 1);
     }, 30);
-
-    const userRef = firestore.collection("users");
-    userRef
-      .doc(userId)
-      .get()
-      .then((resUser) => {
-        setUser({
-          id: resUser.id,
-          userName: resUser.data().userName,
-          Avatar: resUser.data().photoURL,
-          time: resUser.data().time,
-        });
+    // const userRef = firestore.collection("users");
+    // userRef
+    //   .add(state.user)
+    //   .then((resUser) => {
+        // setUser({
+        //   id: resUser.id,
+        //   userName: resUser.data().userName,
+        //   Avatar: resUser.data().photoURL,
+        //   time: resUser.data().time,
+        // });
+        // dispath({
+        //   type:"SETUSERID",
+        //   payload:{userId:resUser.id}
+        // })
         clearInterval(load);
-      });
+      // });
 
 
     if (user) {
@@ -62,8 +67,9 @@ const SelectionAvatar = (props) => {
             <ProcessBar percent={percentage} inverted progress success />
           ) : (
             <>
-              <Avatar src={user.Avatar} />
-              <Namebox>{user.userName}</Namebox>
+              <Avatar src={state.user.photoURL} />
+              <Namebox>{state.user.userName}</Namebox>
+              <Namebox>Invitation PIN:{state.user.pin}</Namebox>
               <Button onClick={handleEnter}>Enter Chat Room</Button>
               <EnterBtn onClick={handleLogout}>Log Out</EnterBtn>
             </>

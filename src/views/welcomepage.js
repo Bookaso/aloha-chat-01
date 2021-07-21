@@ -1,37 +1,31 @@
-import React, { useState } from "react";
 import styled from "styled-components";
 
 import { Image } from "semantic-ui-react";
-import logo from '../images/logo/logo-chat.png'
+import logo from "../images/logo/logo-chat.png";
 
-import CreateAvatar from "./createavatar";
-
+import CreateAvatar from "./createaccout";
+//import usercontextprovider
+import { UserContextProvider } from "../Context/usercontext"
 
 const Welcome = () => {
-  const [isEnter, setIsEnter] = useState(true);
-
-  function handleEnter() {
-    setIsEnter((prev) => !prev);
-  }
   return (
-    <>
-      {isEnter ? (
+    <UserContextProvider>
         <WelcomePage>
           <Image src={logo} size="small" />
           <h2>ALOHA CHAT</h2>
-          <EnterBtn onClick={handleEnter}>Enter</EnterBtn>
+          <BtnGroup>
+            <EnterBtn>Log In</EnterBtn>
+            <EnterBtn>Sign Up</EnterBtn>
+          </BtnGroup>
         </WelcomePage>
-      ) : (
-        <CreateAvatar isEnter={handleEnter} />
-      )}
-    </>
+    </UserContextProvider>
   );
 };
 
 const WelcomePage = styled.div`
   min-height: 80vh;
   min-width: 80vw;
-  font-family: 'Ubuntu';
+  font-family: "Ubuntu";
   background-color: rgba(215, 177, 157, 0.4);
   backdrop-filter: blur(10px);
   border-radius: 20px;
@@ -42,11 +36,15 @@ const WelcomePage = styled.div`
   padding: 5px;
   align-items: center;
 `;
+const BtnGroup = styled.div`
+  display: flex;
+`;
 const EnterBtn = styled.button`
-  width: 5rem;
-  height: 2rem;
+  width: auto;
   border: none;
-  font-family: 'Ubuntu';
+  padding: 10px;
+  margin: 5px;
+  font-family: "Ubuntu";
   text-align: center;
   background: #c68b59;
   color: #fff;

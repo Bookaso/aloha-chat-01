@@ -1,31 +1,46 @@
-import React, { useState } from "react";
+import React, { useState,useEffect,useContext } from "react";
 import styled from "styled-components";
 import { Image } from "semantic-ui-react";
+import { UserContext } from "../../Context/usercontext"
 
 const SelectionAvatar = (props) => {
   const [show, setShow] = useState(false);
+  const [state, dispath] = useContext(UserContext);
+  const num = Math.floor(Math.random() * 20);
+
 
   function popup() {
     setShow((prevState) => !prevState);
   }
-
-  function onSelect(index) {
-    props.onSelect(index);
+  function selectedAvatar(index) {
+    dispath({
+      type:"SETAVATAR",
+      payload:{photoURL:state.images[index]}
+    })
     setShow((prevState) => !prevState);
   }
 
+
+  useEffect(()=>{
+
+    dispath({
+      type:"SETAVATAR",
+      payload:{photoURL:state.images[num]}
+    })
+  },[])
+
   return (
     <>
-      <Avatar circular src={props.image} />
+      <Avatar circular src={state.user.photoURL} />
       <ListAvatar show={show}>
         <CloseBtn onClick={popup}>Close</CloseBtn>
-        {props.images.map((avatar, index) => {
+        {state.images.map((avatar, index) => {
           return (
             <Avatars
               key={index}
               circular
               src={avatar}
-              onClick={() => onSelect(index)}
+              onClick={() => selectedAvatar(index)}
             />
           );
         })}

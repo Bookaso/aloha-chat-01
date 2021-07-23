@@ -17,6 +17,7 @@ export const Pininput = (props) => {
     });
     return setIsExisted(false);
   }, [props.pin]);
+
   return (
     <>
       <label>Create invitation PIN 4 digits</label>

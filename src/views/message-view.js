@@ -6,25 +6,24 @@ import firestore from "../database/firebase";
 import Msg from "../components/message";
 
 const MessageView = (props) => {
-  const { currentUser } = props;
-  console.log(currentUser.time);
+  const { currentUser,chatUser } = props;
   const [data, setData] = useState([]);
   const ref = useRef()
   useEffect(() => {
-    const messageRef = firestore.collection("message")
+    const messageRef = firestore.collection(`users/${currentUser.userId}/friends/${chatUser.userId}/message`)
     const query1 = messageRef.orderBy("time", "asc");
-    const query =  query1.where("time",">",currentUser.time)
-    query.onSnapshot((snapShot) => {
+    // const query =  query1.where("time",">",currentUser.time)
+    query1.onSnapshot((snapShot) => {
       let tempData = [];
       snapShot.forEach((doc) => {
         tempData = [
           ...tempData,
           {
-            id: doc.data().user.id,
+            id: doc.data().user.userId,
             userName: doc.data().user.userName,
-            avatar: doc.data().user.Avatar,
+            avatar: doc.data().user.photoURL,
             text: doc.data().text,
-            float: currentUser.id === doc.data().user.id ? "right" : "left",
+            float: currentUser.userId === doc.data().user.userId ? "right" : "left",
           },
         ];
       });

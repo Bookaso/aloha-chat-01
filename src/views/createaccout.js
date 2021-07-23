@@ -1,30 +1,24 @@
-import React, { useState, useEffect, useContext } from "react";
+import React from "react";
+import { useHistory } from 'react-router-dom'
 import styled from "styled-components";
 
-import { UserContext } from "../Context/usercontext";
 
 import CreateForm from "../components/Form/form";
 import SelectAvatar from "../components/Form/selectavatar";
 
 const CreateAccout = (props) => {
-  const [state, dispath] = useContext(UserContext);
+  let history = useHistory();
 
-  function handleEnter() {
-    props.isEnter((prev) => !prev);
-  }
-
-  function handleLogout() {
-    dispath({
-      type: "Logout",
-    });
-    props.isEnter((prev) => !prev);
+  function goToHome() {
+    history.replace("/")
   }
 
   return (
         <CreatePage>
+        <h2>Create Account</h2>
           <SelectAvatar />
           <CreateForm />
-          <EnterBtn>BACK</EnterBtn>
+          <EnterBtn onClick={goToHome}>Home</EnterBtn>
         </CreatePage>
   );
 };

@@ -1,24 +1,28 @@
 import styled from "styled-components";
-
 import { Image } from "semantic-ui-react";
 import logo from "../images/logo/logo-chat.png";
 
-import CreateAvatar from "./createaccout";
+import { useHistory } from 'react-router-dom'
 //import usercontextprovider
-import { UserContextProvider } from "../Context/usercontext"
 
 const Welcome = () => {
+  let history = useHistory();
+
+  function goToLogin() {
+    history.push("/login")
+  }
+  function goToSignUp() {
+    history.push("/signup")
+  }
   return (
-    <UserContextProvider>
-        <WelcomePage>
-          <Image src={logo} size="small" />
-          <h2>ALOHA CHAT</h2>
-          <BtnGroup>
-            <EnterBtn>Log In</EnterBtn>
-            <EnterBtn>Sign Up</EnterBtn>
-          </BtnGroup>
-        </WelcomePage>
-    </UserContextProvider>
+    <WelcomePage>
+      <Image src={logo} size="small" />
+      <h2>ALOHA CHAT</h2>
+      <BtnGroup>
+        <EnterBtn onClick={goToLogin} >Log In</EnterBtn>
+        <EnterBtn onClick={goToSignUp} >Sign Up</EnterBtn>
+      </BtnGroup>
+    </WelcomePage>
   );
 };
 

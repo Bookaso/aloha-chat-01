@@ -1,20 +1,37 @@
 import { useState, useContext } from "react";
 import styled from "styled-components";
 import _ from "lodash";
-
+import {useHistory} from 'react-router-dom'
+import { Confirm } from 'semantic-ui-react'
+//DB
+import firestore from '../../database/firebase'
 import firebase from "firebase/app";
-
+//components
 import { Pininput } from "../Form/pininput";
 import { Usernameinput } from "../Form/usernameinput";
-
+//context
 import { UserContext } from "../../Context/usercontext";
 
 const CreationForm = () => {
+  let history = useHistory();
+  const [show, setshow] = useState(false);
   const [name, setName] = useState("");
   const [pin, setPin] = useState(Number);
   const [state, dispath] = useContext(UserContext);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = () => {
+    const userRef = firestore.collection("users");
+    userRef.add(state.user).then((resId) => {
+      console.log(resId.id);
+      const userUpdate = firestore.collection("users");
+      userUpdate.doc(resId.id).update({userId:resId.id})
+      .then(()=>{
+        history.replace('/login');
+      })
+    });
+  };
+
+  function handleShow(e) {
     e.preventDefault();
     dispath({
       type: "CREATEUSER",
@@ -24,16 +41,23 @@ const CreationForm = () => {
         time: firebase.firestore.Timestamp.now().toMillis(),
       },
     });
-    dispath({
-      type: "ADDUSERDB",
-    });
-  };
+    setshow((prev)=> !prev)
+  }
 
   return (
-    <Form onSubmit={handleSubmit}>
+    <Form onSubmit={handleShow}>
       <Usernameinput name={name} setName={setName} />
       <Pininput pin={pin} setPin={setPin} />
       <Button type="submit">Create Account</Button>
+      <Confirm 
+        open={show}
+        header="Please remember your information"
+        content={`User name : ${name} PIN:${pin}`}
+        cancelButton="Cancel"
+        confirmButton="Create Account"
+        onCancel={handleShow}
+        onConfirm={handleSubmit}
+      />
     </Form>
   );
 };

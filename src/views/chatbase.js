@@ -1,62 +1,64 @@
-import React,{useState} from "react";
+import React, { useState, useContext } from "react";
 import styled from "styled-components";
 import { Sidebar } from "semantic-ui-react";
-import { useIdleTimer } from 'react-idle-timer'
+import { useHistory,useLocation , Switch, Route } from "react-router";
 
-//import database
-import firestore from "../database/firebase";
-import firebase from "firebase/app";
-
+//context
+import { UserContext } from "../Context/usercontext";
 //import components
-import MessageView from "./message-view";
-import MessageText from "../components/message-field";
+import MessageSection from './messagesection'
 import MessageHeader from "./messageHeader";
 import Userlist from "../components/userlists";
+import MessageFooter from "./messagefooter";
+import Adduser from './adduser'
 
-function Chat(props) {
-  const { user } = props;
-  const [isShow, setIsShow] = useState(false);
-  const [time, setTime] = useState(1000*60*30);
+const Chat = () => {
+  let history = useHistory();
+  let location = useLocation();
 
-  function IsShow() {
-    setIsShow((prev) => !prev)
+  const [state, dispath] = useContext(UserContext);
+  const [user, setUser] = useState("");
+
+
+  function handleItemClick(name) {
+    if (location.pathname.includes("chat")) {
+        history.push(`${location.pathname.replace("chat",name)}`)
+    } else if(location.pathname.includes("contacts")) {
+        history.push(`${location.pathname.replace("contacts",name)}`)
+    } else if (location.pathname.includes("adduser")){
+      history.push(`${location.pathname.replace("adduser",name)}`)
+    }else{
+      history.push(`${location.pathname}/${name}`)
+    }
+}
+
+const ShowFooter = () =>{
+  if (location.pathname.includes("chat")) {
+    return null
   }
+  return  <MessageFooter handleItemClick={handleItemClick} />
+}
 
-  function handleInput(text) {
-    const messageRef = firestore.collection("message");
-    messageRef
-      .add({
-        user: user,
-        text: text,
-        time: firebase.firestore.Timestamp.now().toMillis(),
-      })
-      .then(() => {
-        console.log("send");
-      });
-  }
-
-  function handleIdle() {
-    props.handleEnter()
-    props.handleLogout()
-  }
-
-  function resetTime() {
-    setTime(1000*60*30)
-  }
-  useIdleTimer({
-    timeout: time,
-    onIdle:handleIdle,
-    onAction:resetTime,
-    onActive:resetTime,
-  })
+function getToChat(chatuser) {
+  console.log(chatuser);
+  setUser(chatuser)
+  history.push(`${location.pathname.replace("contacts","chat")}`)
+}
   return (
     <Chatbase>
-      <Userlist isShow={isShow}/>
-      <Sidebar.Pusher>
-      <MessageHeader handleEnter={props.handleEnter} isShow={IsShow}/>
-      <MessageView currentUser={user} />
-      <MessageText handleInput={handleInput} />
-      </Sidebar.Pusher>
+      <MessageHeader />
+      <Switch>
+        <Route path="/:userName/chat">
+          <MessageSection chatUser={user} />
+        </Route>
+        <Route path="/:userName/contacts">
+          <Userlist  handleItemClick={handleItemClick} getToChat={getToChat}/>
+        </Route>
+        <Route path="/:userName/adduser">
+          <Adduser />
+        </Route>
+      </Switch>
+      {ShowFooter()}
     </Chatbase>
   );
 }
@@ -64,15 +66,15 @@ function Chat(props) {
 const Chatbase = styled(Sidebar.Pushable)`
   min-height: 80vh;
   min-width: 80vw;
-  background-color: rgba(215, 177, 157, 0.4);
+  background-color: rgba(215, 177, 157, 1);
   backdrop-filter: blur(10px);
   border-radius: 20px;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   padding: 5px;
   align-items: center;
   overflow: hidden;
 `;
-
 
 export default Chat;

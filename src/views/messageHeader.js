@@ -1,31 +1,30 @@
-import React, { useState, useEffect } from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
-import firestore from "../database/firebase";
-
-const MessageHeader = (props) => {
-  const [onlineUser, setOnlineUser] = useState(0);
-
-  function IsShow() {
-    props.isShow();
+import { useHistory } from "react-router-dom";
+import { Image, Dropdown } from "semantic-ui-react";
+import { UserContext } from "../Context/usercontext";
+const MessageHeader = () => {
+  let history = useHistory();
+  const [state, dispath] = useContext(UserContext);
+  function goBack() {
+    history.goBack();
   }
-
-  useEffect(() => {
-    const userRef = firestore.collection("users");
-    userRef.onSnapshot((querySanpshot) => {
-      let length = querySanpshot.docs.length;
-      setOnlineUser(length);
-    });
-  }, []);
 
   return (
     <HeaderContainer>
-      <Logo>CHAT</Logo>
-        <BTN onlineUser={onlineUser} onClick={IsShow}>
-          Online {onlineUser} users
-        </BTN>
-      <Back onClick={props.handleEnter}>
+      <Logo>
+        <Image src={state.user.photoURL} avatar /> 
+        {state.user.userName} CHAT
+        <Dropdown item >
+        <Dropdown.Menu>
+        <Dropdown.Item>
+          Test
+        </Dropdown.Item>
+        </Dropdown.Menu>
+        </Dropdown>
+      </Logo>
+      <Back onClick={goBack}>
         <Icon icon="arrow-circle-left" />
         BACK
       </Back>
@@ -44,28 +43,16 @@ const HeaderContainer = styled.div`
 `;
 const Back = styled.div`
   height: 100%;
-  width: 40%;
   display: flex;
   justify-content: center;
   align-items: center;
   font-weight: 500;
+  margin-right: 2rem;
   cursor: pointer;
 `;
 const Logo = styled.div`
   height: 100%;
   width: 40%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-weight: 500;
-`;
-
-const BTN = styled.button`
-  height: 50%;
-  color: #fff;
-  border: none;
-  background: ${(props) => (props.onlineUser > 1 ? "rgb(0,100,0)": "red")};
-  font-size: 1.2rem;
   display: flex;
   justify-content: center;
   align-items: center;

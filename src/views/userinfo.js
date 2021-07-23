@@ -1,84 +1,54 @@
-import React, { useState, useEffect,useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import styled from "styled-components";
 import { Image, Progress } from "semantic-ui-react";
-//import database
-
-import firestore from "../database/firebase";
+import { useHistory } from "react-router-dom";
 import { UserContext } from "../Context/usercontext";
 import Chat from "./chatbase";
-
-const SelectionAvatar = (props) => {
+const SelectionAvatar = () => {
   const [state, dispath] = useContext(UserContext);
-  
-  const { userId } = props;
-  const [isEnter, setIsEnter] = useState(true);
+  let history = useHistory();
   const [isGet, setIsGet] = useState(true);
   const [percentage, setPercentage] = useState(20);
-  const [user, setUser] = useState({
-    id: "",
-    userName: "",
-    Avatar: "",
-  });
-
-  function handleEnter() {
-    setIsEnter((prev) => !prev);
-  }
 
   function handleLogout() {
-    props.logout();
+    dispath({
+      type: "Logout",
+    });
+    history.replace("/login");
   }
 
+  function enterChat() {
+    history.replace(`/${state.user.userName}`);
+  }
   useEffect(() => {
     const load = setInterval(() => {
       setPercentage((prev) => prev + 1);
     }, 30);
-    // const userRef = firestore.collection("users");
-    // userRef
-    //   .add(state.user)
-    //   .then((resUser) => {
-        // setUser({
-        //   id: resUser.id,
-        //   userName: resUser.data().userName,
-        //   Avatar: resUser.data().photoURL,
-        //   time: resUser.data().time,
-        // });
-        // dispath({
-        //   type:"SETUSERID",
-        //   payload:{userId:resUser.id}
-        // })
-        clearInterval(load);
-      // });
 
-
-    if (user) {
+    if (state.user) {
       setPercentage(100);
+      clearInterval(load);
     }
 
     setTimeout(() => {
       setIsGet(false);
       setPercentage(20);
     }, 500);
-  }, [isGet]);
+  }, [state.user]);
   return (
-    <>
-      {isEnter ? (
-        <UserInfo>
-          {isGet ? (
-            <ProcessBar percent={percentage} inverted progress success />
-          ) : (
-            <>
-              <Avatar src={state.user.photoURL} />
-              <Namebox>{state.user.userName}</Namebox>
-              <Namebox>Invitation PIN:{state.user.pin}</Namebox>
-              <Button onClick={handleEnter}>Enter Chat Room</Button>
-              <EnterBtn onClick={handleLogout}>Log Out</EnterBtn>
-            </>
-          )}
-        </UserInfo>
+    <UserInfo>
+      {isGet ? (
+        <ProcessBar percent={percentage} inverted progress success />
       ) : (
-        <Chat handleEnter={handleEnter} handleLogout={handleLogout} user={user} />
+        <>
+          <Avatar src={state.user.photoURL} />
+          <Namebox>{state.user.userName}</Namebox>
+          <Namebox>Invitation PIN:{state.user.pin}</Namebox>
+          <Button onClick={enterChat}>Enter Chat Room</Button>
+          <EnterBtn onClick={handleLogout}>Log Out</EnterBtn>
+        </>
       )}
-    </>
+    </UserInfo>
   );
 };
 const UserInfo = styled.div`

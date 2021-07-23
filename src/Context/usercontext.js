@@ -1,5 +1,4 @@
 import { useReducer, createContext } from "react";
-import firestore from "../database/firebase"
 
 export const UserContext = createContext();
 
@@ -18,12 +17,13 @@ const inintialUser = {
     pin: Number,
     photoURL: "",
     time: "",
-    addedusers: [],
+    // addedusers: [],
+    // requestusers: [],
   },
   login: false,
   images: listImages(),
 };
-
+console.log("context called");
 const reducer = (state, action) => {
   switch (action.type) {
     case "CREATEUSER":
@@ -34,7 +34,8 @@ const reducer = (state, action) => {
           pin: action.payload.pin,
           photoURL: state.user.photoURL,
           time: action.payload.time,
-          addedusers: state.user.addedusers,
+          // addedusers: state.user.addedusers,
+          // requestusers: state.user.requestusers,
         },
         login: state.login,
         images: state.images,
@@ -47,7 +48,8 @@ const reducer = (state, action) => {
           pin: state.user.pin,
           photoURL: action.payload.photoURL,
           time: state.user.time,
-          addedusers: state.user.addedusers,
+          // addedusers: state.user.addedusers,
+          // requestusers: state.user.requestusers,
         },
         login: state.login,
         images: state.images,
@@ -55,12 +57,13 @@ const reducer = (state, action) => {
     case "Login":
       return {
         user: {
-          userId: state.user.userId,
-          userName: state.user.userName,
-          pin: state.user.pin,
-          photoURL: state.user.photoURL,
-          time: state.user.time,
-          addedusers: state.user.addedusers,
+          userId: action.payload.userId,
+          userName: action.payload.userName,
+          pin: action.payload.pin,
+          photoURL: action.payload.photoURL,
+          time: action.payload.time,
+          // addedusers: action.payload.addedusers,
+          // requestusers: state.user.requestusers,
         },
         login: true,
         images: state.images,
@@ -68,25 +71,27 @@ const reducer = (state, action) => {
     case "Logout":
       return {
         user: {
-          userId: state.user.userId,
-          userName: state.user.userName,
-          pin: state.user.pin,
-          photoURL: state.user.photoURL,
-          time: state.user.time,
-          addedusers: state.user.addedusers,
+          userId: "",
+          userName: "",
+          pin: Number,
+          photoURL: "",
+          time: "",
+          // addedusers: [],
+          // requestusers: [],
         },
         login: false,
         images: state.images,
       };
-      case "ADDUSERDB":
+      case "SETUSERID":
         return {
           user: {
-            userId: addUserDB(state.user),
+            userId: action.payload.userId,
             userName: state.user.userName,
             pin:state.user.pin,
             photoURL: state.user.photoURL,
             time: state.user.time,
-            addedusers: state.user.addedusers,
+            // addedusers: state.user.addedusers,
+            // requestusers: state.user.requestusers,
           },
           login: state.login,
           images: state.images,
@@ -95,16 +100,6 @@ const reducer = (state, action) => {
       return state;
   }
 };
-
-function addUserDB(user) {
-  let id =""
-    const userRef = firestore.collection("users");
-    userRef.add(user).then((resId) => {
-      console.log(resId);
-      id = resId.id
-    });
-    return id
-}
 
 export const UserContextProvider = (props) => {
   const [state, dispath] = useReducer(reducer, inintialUser);

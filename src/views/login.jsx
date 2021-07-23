@@ -1,25 +1,49 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
+import { useHistory } from "react-router-dom";
+import { Image } from "semantic-ui-react";
+import { UserContext } from "../Context/usercontext";
 import styled from "styled-components";
 import _ from "lodash";
 import firestore from "../database/firebase";
+import logo from "../images/logo/logo-chat.png";
 
 const Login = () => {
+  const [state, dispath] = useContext(UserContext);
   const [isExisted, setIsExisted] = useState(false);
   const [name, setName] = useState("");
   const [pin, setPin] = useState("");
   const userRef = firestore.collection("users");
+  let history = useHistory();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const userpin = userRef.where("pin", "==", pin);
+    const userpin = userRef
+    .where("userName", "==", _.capitalize(name))
+    .where("pin", "==", pin)
     userpin.get().then((querySnapshotPin) => {
-      querySnapshotPin.forEach((resPin) => {
-        if (resPin.exists) {
+      querySnapshotPin.forEach((user) => {
+        if (user.exists) {
           console.log("success");
+          dispath({
+            type: "Login",
+            payload: {
+              userId: user.id,
+              userName: user.data().userName,
+              pin: user.data().pin,
+              photoURL: user.data().photoURL,
+              time: user.data().time,
+              addedusers: user.data().addedusers,
+            },
+          });
+          history.push("/user");
         }
       });
     });
   };
+
+  function goToHome() {
+    history.replace("/");
+  }
 
   useEffect(() => {
     const user = userRef.where("userName", "==", _.capitalize(name));
@@ -35,30 +59,35 @@ const Login = () => {
 
   return (
     <LoginPage>
+      <Image src={logo} size="tiny" />
+      <h2>LOG IN</h2>
       <Form onSubmit={handleSubmit}>
+        <label>Enter User Name</label>
         <Input
           type="text"
           name="name"
           value={name}
-          onChange={(e) =>setName(e.target.value)}
+          onChange={(e) => setName(e.target.value)}
           placeholder="Username"
           required
         />
-       {!isExisted ? null :
-       <>
-        <Input
-        type="text"
-        name="pin"
-        value={pin === 0 ? "" : pin}
-        maxLength="4"
-        onChange={(e) => setPin(e.target.value)}
-        placeholder="PIN"
-        required
-      />
-        <Button type="submit">LOG IN</Button>
-        </>
-      } 
+        {!isExisted ? null : (
+          <>
+            <label>Confirm your PIN</label>
+            <Input
+              type="text"
+              name="pin"
+              value={pin === 0 ? "" : pin}
+              maxLength="4"
+              onChange={(e) => setPin(e.target.value)}
+              placeholder="PIN"
+              required
+            />
+            <Button type="submit">LOG IN</Button>
+          </>
+        )}
       </Form>
+      <EnterBtn onClick={goToHome}>Home</EnterBtn>
     </LoginPage>
   );
 };
@@ -101,8 +130,23 @@ const Input = styled.input`
   border: none;
   border-radius: 5px;
   text-align: center;
-  font-family: 'Ubuntu';
+  font-family: "Ubuntu";
   margin-bottom: 1rem;
 `;
-
+const EnterBtn = styled.button`
+  width: 8rem;
+  height: 2rem;
+  border: none;
+  font-family: "Ubuntu";
+  background: #c68b59;
+  color: #fff;
+  border-radius: 20px;
+  letter-spacing: 1.4px;
+  margin-top: 2rem;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
+    rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+  &:hover {
+    background: rgba(198, 139, 89, 0.8);
+  }
+`;
 export default Login;

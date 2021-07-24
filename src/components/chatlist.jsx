@@ -1,8 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import styled from "styled-components";
 import { useParams } from "react-router-dom";
-import { List, Image, Button } from "semantic-ui-react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { List, Image } from "semantic-ui-react";
 import { UserContext } from "../Context/usercontext";
 import firestore from "../database/firebase";
 
@@ -71,7 +70,7 @@ const Chatlist = (props) => {
               return (
                 <ListConstainer.Item
                   key={user.user.userId}
-                  onClick={() => getToChat(user)}
+                  onClick={() => getToChat({user})}
                 >
                   <ListConstainer.Content floated="right">
                     <ListConstainer.Description>

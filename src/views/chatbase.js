@@ -43,7 +43,12 @@ const Chat = () => {
   function getToChat(chatuser) {
     console.log(chatuser);
     setUser(chatuser);
-    history.push(`${location.pathname.replace("contacts", "chat")}`);
+    if (location.pathname.includes("contacts")) {
+      history.push(`${location.pathname.replace("contacts", "chat")}`);
+    } else if (location.pathname.includes("historylist")) {
+      history.push(`${location.pathname.replace("historylist", "chat")}`);
+    }
+    
   }
 
   useEffect(()=>{
@@ -57,7 +62,7 @@ const Chat = () => {
           <MessageSection chatUser={user} />
         </Route>
         <Route path="/:userName/historylist">
-          <Chatlist />
+          <Chatlist getToChat={getToChat} />
         </Route>
         <Route path="/:userName/contacts">
           <Userlist handleItemClick={handleItemClick} getToChat={getToChat} />

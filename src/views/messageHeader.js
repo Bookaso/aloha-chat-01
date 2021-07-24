@@ -60,6 +60,7 @@ const HeaderContainer = styled.div`
   overflow: hidden;
   display: flex;
   justify-content: space-between;
+  padding: 5px;
   position: relative;
   z-index: 1000;
 `;
@@ -74,7 +75,7 @@ const Back = styled.div`
 `;
 const Logo = styled.div`
   height: 100%;
-  width: 40%;
+  width: 45%;
   display: flex;
   justify-content: space-evenly;
   align-items: center;

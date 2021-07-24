@@ -81,6 +81,7 @@ const AddIcon = styled(FontAwesomeIcon)`
 `;
 const Input = styled.input`
   height: 2rem;
+  width: 150px;
   border: none;
   border-radius: 5px;
   text-align: center;

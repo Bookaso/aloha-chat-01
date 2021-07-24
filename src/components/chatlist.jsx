@@ -13,38 +13,40 @@ const Chatlist = (props) => {
   const { userName } = useParams();
 
   function getToChat(user) {
-    props.getToChat(user)
+    props.getToChat(user);
   }
 
   useEffect(() => {
     let tempLists = [];
     let tempObj = {};
-    const userRef = firestore.collection(`users/${state.user.userId}/friends`)
+    const userRef = firestore.collection(`users/${state.user.userId}/friends`);
     userRef
-    .get()
-    .then((querysnapshot) => {
-      querysnapshot.forEach((doc) => {
-        console.log(doc.data());
-        console.log(doc.id);
+      .get()
+      .then((querysnapshot) => {
+        querysnapshot.forEach((doc) => {
+          console.log(doc.data());
+          console.log(doc.id);
 
-        const msgRef = firestore.collection(`users/${state.user.userId}/friends/${doc.id}/message`);
-        const msgQuery = msgRef.orderBy("time","desc");
-        msgQuery.limit(1)
-                .get()
-                .then((msgquerysnapshot)=>{
-                  msgquerysnapshot.forEach((msg)=>{
-                      console.log("chatlist",msg.data());
-                      tempObj = {user:doc.data(),message:msg.data()}
-                      tempLists = [...tempLists, tempObj];
-                      setUsers(tempLists);
-                    })
-                  })
-                  
+          const msgRef = firestore.collection(
+            `users/${state.user.userId}/friends/${doc.id}/message`
+          );
+          const msgQuery = msgRef.orderBy("time", "desc");
+          msgQuery
+            .limit(1)
+            .get()
+            .then((msgquerysnapshot) => {
+              msgquerysnapshot.forEach((msg) => {
+                console.log("chatlist", msg.data());
+                tempObj = { user: doc.data(), message: msg.data() };
+                tempLists = [...tempLists, tempObj];
+                setUsers(tempLists);
+              });
+            });
+        });
       })
-    })
-    .then(()=>{
-      setLoadind(false);
-    })
+      .then(() => {
+        setLoadind(false);
+      });
     console.log(users);
   }, [loading]);
 
@@ -55,7 +57,7 @@ const Chatlist = (props) => {
   function getSubString(msg) {
     console.log("sunstring called");
     if (msg.length > 13) {
-      return `${msg.substring(0,13)}...`;
+      return `${msg.substring(0, 13)}...`;
     }
     return msg;
   }
@@ -64,23 +66,29 @@ const Chatlist = (props) => {
       <Topsection>
         <Input size="mini" placeholder="Search..." />
       </Topsection>
-      <ListConstainer
-        selection
-        divided
-        verticalAlign="middle"
-        size="massive"
-      >
+      <ListConstainer selection divided size="big">
         {!loading
           ? users.map((user) => {
               return (
-                <ListConstainer.Item key={user.user.userId} onClick={()=>getToChat(user)} >
+                <ListConstainer.Item
+                  key={user.user.userId}
+                  onClick={() => getToChat(user)}
+                >
                   <ListConstainer.Content floated="right">
-                  <ListConstainer.Description>{getLocalTime(user.message.time)}</ListConstainer.Description>
+                    <ListConstainer.Description>
+                      {getLocalTime(user.message.time)}
+                    </ListConstainer.Description>
                   </ListConstainer.Content>
-                  <Image avatar src={user.user.photoURL} />
+                  <ListConstainer.Content floated="left">
+                    <Image avatar src={user.user.photoURL} />
+                    <ListConstainer.Header>
+                      {user.user.userName}
+                    </ListConstainer.Header>
+                  </ListConstainer.Content>
                   <ListConstainer.Content>
-                    <ListConstainer.Header>{user.user.userName}</ListConstainer.Header>
-                   <ListConstainer.Description>Message: {getSubString(user.message.text)}</ListConstainer.Description>
+                    <ListConstainer.Description>
+                      {getSubString(user.message.text)}
+                    </ListConstainer.Description>
                   </ListConstainer.Content>
                 </ListConstainer.Item>
               );
@@ -101,13 +109,9 @@ const Topsection = styled.div`
   /* height: 5vh; */
   font-size: 1.5rem;
 `;
-const AddIcon = styled(FontAwesomeIcon)`
-  &:hover {
-    color: #50cb93;
-  }
-`;
 const Input = styled.input`
   height: 2rem;
+  width: 150px;
   border: none;
   border-radius: 5px;
   text-align: center;

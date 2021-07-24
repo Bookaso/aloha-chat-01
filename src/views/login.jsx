@@ -18,8 +18,8 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const userpin = userRef
-    .where("userName", "==", _.capitalize(name))
-    .where("pin", "==", pin)
+      .where("userName", "==", _.capitalize(name))
+      .where("pin", "==", pin);
     userpin.get().then((querySnapshotPin) => {
       querySnapshotPin.forEach((user) => {
         if (user.exists) {
@@ -43,6 +43,10 @@ const Login = () => {
 
   function goToHome() {
     history.replace("/");
+  }
+
+  function goToSignUp() {
+    history.push("/signup");
   }
 
   useEffect(() => {
@@ -73,7 +77,7 @@ const Login = () => {
         />
         {!isExisted ? null : (
           <>
-            <label>Confirm your PIN</label>
+            <label>Enter your PIN</label>
             <Input
               type="text"
               name="pin"
@@ -87,7 +91,10 @@ const Login = () => {
           </>
         )}
       </Form>
+      <BtnGroup>
       <EnterBtn onClick={goToHome}>Home</EnterBtn>
+      <EnterBtn onClick={goToSignUp}>Sign Up</EnterBtn>
+      </BtnGroup>
     </LoginPage>
   );
 };
@@ -133,6 +140,10 @@ const Input = styled.input`
   font-family: "Ubuntu";
   margin-bottom: 1rem;
 `;
+
+const BtnGroup = styled.div`
+  display: flex;
+`;
 const EnterBtn = styled.button`
   width: 8rem;
   height: 2rem;
@@ -142,7 +153,7 @@ const EnterBtn = styled.button`
   color: #fff;
   border-radius: 20px;
   letter-spacing: 1.4px;
-  margin-top: 2rem;
+  margin: 1rem;
   box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
     rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
   &:hover {

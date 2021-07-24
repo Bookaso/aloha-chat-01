@@ -15,7 +15,11 @@ const Msg = (props) => {
           <Body float={data.float}>
             <p>{data.text}</p>
           </Body>
+          <Time float={data.float}>
+          <p>{data.time}</p>
+        </Time>
         </Msginfo>
+        
       </Msgcontainer>
     </>
   );
@@ -24,7 +28,7 @@ const Msg = (props) => {
 const Msgcontainer = styled.div`
   width: 100%;
   height: fit-content;
-  font-family: 'Ubuntu';
+  font-family: "Ubuntu";
   /* color: #fff; */
 `;
 
@@ -40,7 +44,7 @@ const Info = styled.div`
   font-size: 1rem;
   line-height: 0%.4;
   display: flex;
-  font-family: 'Ubuntu';
+  font-family: "Ubuntu";
   color: black;
   align-items: center;
   flex-direction: ${(props) =>
@@ -52,12 +56,12 @@ const Body = styled.div`
   float: ${(props) => props.float};
   width: fit-content;
   font-size: 0.9rem;
-  font-family: 'Ubuntu';
+  font-family: "Ubuntu";
   line-height: 0.4;
   color: black;
   display: flex;
   text-align: left;
-  align-items:center;
+  align-items: center;
   border-radius: 1rem;
   padding: 1.125em 1.5em;
   ${(props) =>
@@ -70,6 +74,15 @@ const Body = styled.div`
      "flex-direction: row";
       margin-left: 50px;
     `}
+`;
+const Time = styled.div`
+  float: ${(props) => props.float};
+  width: fit-content;
+  font-size: 0.5rem;
+  font-family: "Ubuntu";
+  line-height: 0.4;
+  color: black;
+  position: relative;
 `;
 
 export default Msg;

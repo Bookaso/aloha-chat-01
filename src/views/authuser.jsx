@@ -14,7 +14,7 @@ const AuthUser = ({children, ...rest}) => {
             :
             <Redirect 
                 to={{
-                    pathname:"/signup",
+                    pathname:"/login",
                 }}
             />
             }

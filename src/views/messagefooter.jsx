@@ -24,8 +24,8 @@ const MessageFooter = (props) =>{
         CONTACTS
         </Menu.Item>
         <Menu.Item 
-        name="chat"
-        active={ activeItem === "chat"}
+        name="historylist"
+        active={ activeItem === "historylist"}
         onClick={handleItemClick}
         >
         CHAT

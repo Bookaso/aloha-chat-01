@@ -11,9 +11,7 @@ const Messagesection = (props) => {
   const [state, dispath] = useContext(UserContext);
 
   function handleInput(text) {
-    const messageRef = firestore.collection(
-      `users/${state.user.userId}/friends/${props.chatUser.userId}/message`
-    );
+    const messageRef = firestore.collection(`users/${state.user.userId}/friends/${props.chatUser.userId}/message`);
     messageRef
       .add({
         user: state.user,
@@ -22,17 +20,15 @@ const Messagesection = (props) => {
       })
       .then(() => {
         console.log("send");
-        const resMessageRef = firestore.collection(
-          `users/${props.chatUser.userId}/friends/${state.user.userId}/message`
-        );
-        resMessageRef.add({
+        const resMessageRef = firestore.collection(`users/${props.chatUser.userId}/friends/${state.user.userId}/message`);
+        resMessageRef
+        .add({
           user: state.user,
           text: text,
           time: firebase.firestore.Timestamp.now().toMillis(),
         });
       });
   }
-
   return (
     <>
       <MessageView currentUser={state.user} chatUser={props.chatUser} />

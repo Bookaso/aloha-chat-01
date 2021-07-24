@@ -31,9 +31,9 @@ function App() {
               <AuthUser path="/user">
                 <UserInfo />
               </AuthUser>
-              <Route path="/:userName">
+              <AuthUser path="/:userName">
                 <Chat />
-              </Route>
+              </AuthUser>
             </Switch>
           </BrowserRouter>
         </UserContextProvider>

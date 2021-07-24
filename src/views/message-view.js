@@ -12,9 +12,8 @@ const MessageView = (props) => {
   const [data, setData] = useState([]);
   const ref = useRef()
   useEffect(() => {
-    const messageRef = firestore.collection(`users/${currentUser.userId}/friends/${chatUser.userId}/message`)
-    const query1 = messageRef.orderBy("time", "asc");
-    // const query =  query1.where("time",">",currentUser.time)
+    const messageRef = firestore.collection(`users/${currentUser.userId}/friends/${chatUser.userId}/message`);
+    const query1 = messageRef.orderBy("time","asc");
     query1.onSnapshot((snapShot) => {
       let tempData = [];
       snapShot.forEach((doc) => {
@@ -26,6 +25,7 @@ const MessageView = (props) => {
             userName: doc.data().user.userName,
             avatar: doc.data().user.photoURL,
             text: doc.data().text,
+            time: new Date(doc.data().time).toLocaleTimeString(),
             float: currentUser.userId === doc.data().user.userId ? "right" : "left",
           },
         ];
@@ -36,7 +36,9 @@ const MessageView = (props) => {
   }, []);
 
   function scrollToCurrent() {
-    ref.current.scrollIntoView();
+    ref.current.scrollIntoView({
+      behavior: "smooth",
+    });
   }
 
   return (

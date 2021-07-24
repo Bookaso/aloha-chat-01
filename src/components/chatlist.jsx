@@ -21,15 +21,14 @@ const Chatlist = (props) => {
     let tempObj = {};
     const userRef = firestore.collection(`users/${state.user.userId}/friends`);
     userRef
-      .get()
-      .then((querysnapshot) => {
-        querysnapshot.forEach((doc) => {
-          console.log(doc.data());
-          console.log(doc.id);
+      .onSnapshot((querysnapshot)=>{
+          querysnapshot.forEach((doc) => {
+            console.log(doc.data());
+            console.log(doc.id);
 
-          const msgRef = firestore.collection(
+            const msgRef = firestore.collection(
             `users/${state.user.userId}/friends/${doc.id}/message`
-          );
+            );
           const msgQuery = msgRef.orderBy("time", "desc");
           msgQuery
             .limit(1)
@@ -39,14 +38,14 @@ const Chatlist = (props) => {
                 console.log("chatlist", msg.data());
                 tempObj = { user: doc.data(), message: msg.data() };
                 tempLists = [...tempLists, tempObj];
-                setUsers(tempLists);
               });
+              setUsers(tempLists);
+              setLoadind(false);
             });
-        });
+          });
       })
-      .then(() => {
-        setLoadind(false);
-      });
+      // .then(() => {
+      // });
     console.log(users);
   }, [loading]);
 

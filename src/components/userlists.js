@@ -21,16 +21,16 @@ const Userlist = (props) => {
   useEffect(() => {
     let tempLists = [];
     const userRef = firestore.collection(`users/${state.user.userId}/friends`);
-    userRef.get()
-    .then((querysnapshot) => {
-      querysnapshot.forEach((doc) => {
-        tempLists = [...tempLists, doc.data()];
+    userRef
+    .onSnapshot((querysnapshot)=>{
+        querysnapshot.forEach((doc) => {
+          tempLists = [...tempLists,doc.data()];
+        })
         setUsers(tempLists);
-      })
-    })
-    .then(()=>{
-      setLoadind(false);
-    })
+        setLoadind(false);
+    }) 
+    // .then(()=>{
+    // })
   }, [loading]);
   return (
     <UserContainer>

@@ -7,6 +7,8 @@ import Msg from "../components/message";
 
 const MessageView = (props) => {
   const { currentUser,chatUser } = props;
+  console.log("current",currentUser);
+  console.log("chat",chatUser);
   const [data, setData] = useState([]);
   const ref = useRef()
   useEffect(() => {
@@ -16,6 +18,7 @@ const MessageView = (props) => {
     query1.onSnapshot((snapShot) => {
       let tempData = [];
       snapShot.forEach((doc) => {
+        console.log(doc.data());
         tempData = [
           ...tempData,
           {

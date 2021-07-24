@@ -26,7 +26,7 @@ const Messagesection = (props) => {
           `users/${props.chatUser.userId}/friends/${state.user.userId}/message`
         );
         resMessageRef.add({
-          user: props.chatUser,
+          user: state.user,
           text: text,
           time: firebase.firestore.Timestamp.now().toMillis(),
         });

@@ -1,10 +1,7 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { Sidebar } from "semantic-ui-react";
 import { useHistory, useLocation, Switch, Route } from "react-router";
 
-//context
-import { UserContext } from "../Context/usercontext";
 //import components
 import MessageSection from "./messagesection";
 import MessageHeader from "./messageHeader";
@@ -12,11 +9,10 @@ import Userlist from "../components/userlists";
 import MessageFooter from "./messagefooter";
 import Adduser from "./adduser";
 import Chatlist from "../components/chatlist";
+
 const Chat = () => {
   let history = useHistory();
   let location = useLocation();
-
-  const [state, dispath] = useContext(UserContext);
   const [user, setUser] = useState("");
 
   function handleItemClick(name) {
@@ -41,19 +37,13 @@ const Chat = () => {
   };
 
   function getToChat(chatuser) {
-    console.log(chatuser);
     setUser(chatuser);
-    if (location.pathname.includes("contacts")) {
-      history.push(`${location.pathname.replace("contacts", "chat")}`);
-    } else if (location.pathname.includes("historylist")) {
-      history.push(`${location.pathname.replace("historylist", "chat")}`);
-    }
-    
+    handleItemClick("chat");
   }
 
-  useEffect(()=>{
-    handleItemClick("contacts")
-  },[])
+  useEffect(() => {
+    handleItemClick("contacts");
+  }, []);
   return (
     <Chatbase>
       <MessageHeader />

@@ -1,15 +1,15 @@
-import React,{useState,useEffect } from "react";
-import { useHistory, useLocation } from 'react-router-dom'
+import React,{useState } from "react";
+import { useParams, useLocation } from 'react-router-dom'
 import styled from "styled-components";
 import { Menu } from 'semantic-ui-react'
 
 const MessageFooter = (props) =>{
-    const [activeItem, setActiveItem] = useState("contacts");
+    let activeName = useParams();
     let location = useLocation();
-    let history = useHistory();
+    let menuName = location.pathname.replace(`/${activeName.userName}/`,"")
+    const [activeItem, setActiveItem] = useState(menuName);
 
     function handleItemClick(e,{ name }) {
-        console.log(name);
         setActiveItem(name);
         props.handleItemClick(name);
     }

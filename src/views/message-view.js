@@ -1,4 +1,4 @@
-import React, { useState, useEffect,useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 //import database
 import firestore from "../database/firebase";
@@ -6,18 +6,17 @@ import firestore from "../database/firebase";
 import Msg from "../components/message";
 
 const MessageView = (props) => {
-  const { currentUser,chatUser } = props;
-  console.log("current",currentUser);
-  console.log("chat",chatUser);
+  const { currentUser, chatUser } = props;
   const [data, setData] = useState([]);
-  const ref = useRef()
+  const ref = useRef();
   useEffect(() => {
-    const messageRef = firestore.collection(`users/${currentUser.userId}/friends/${chatUser.userId}/message`);
-    const query1 = messageRef.orderBy("time","asc");
+    const messageRef = firestore.collection(
+      `users/${currentUser.userId}/friends/${chatUser.userId}/message`
+    );
+    const query1 = messageRef.orderBy("time", "asc");
     query1.onSnapshot((snapShot) => {
       let tempData = [];
       snapShot.forEach((doc) => {
-        console.log(doc.data());
         tempData = [
           ...tempData,
           {
@@ -26,11 +25,12 @@ const MessageView = (props) => {
             avatar: doc.data().user.photoURL,
             text: doc.data().text,
             time: new Date(doc.data().time).toLocaleTimeString(),
-            float: currentUser.userId === doc.data().user.userId ? "right" : "left",
+            float:
+              currentUser.userId === doc.data().user.userId ? "right" : "left",
           },
         ];
       });
-      setData([...data,...tempData]);
+      setData([...data, ...tempData]);
       scrollToCurrent();
     });
   }, []);

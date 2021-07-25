@@ -92,8 +92,8 @@ const Login = () => {
         )}
       </Form>
       <BtnGroup>
-      <EnterBtn onClick={goToHome}>Home</EnterBtn>
-      <EnterBtn onClick={goToSignUp}>Sign Up</EnterBtn>
+        <EnterBtn onClick={goToHome}>Home</EnterBtn>
+        <EnterBtn onClick={goToSignUp}>Sign Up</EnterBtn>
       </BtnGroup>
     </LoginPage>
   );

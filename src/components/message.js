@@ -16,10 +16,9 @@ const Msg = (props) => {
             <p>{data.text}</p>
           </Body>
           <Time float={data.float}>
-          <p>{data.time}</p>
-        </Time>
+            <p>{data.time}</p>
+          </Time>
         </Msginfo>
-        
       </Msgcontainer>
     </>
   );
@@ -29,14 +28,12 @@ const Msgcontainer = styled.div`
   width: 100%;
   height: fit-content;
   font-family: "Ubuntu";
-  /* color: #fff; */
 `;
 
 const Msginfo = styled.div`
   width: 70%;
   height: fit-content;
   padding: 4px 0;
-  /* background: green; */
   float: ${(props) => props.float};
 `;
 

@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { Image, Progress } from "semantic-ui-react";
 import { useHistory } from "react-router-dom";
 import { UserContext } from "../Context/usercontext";
-import Chat from "./chatbase";
+
 const SelectionAvatar = () => {
   const [state, dispath] = useContext(UserContext);
   let history = useHistory();

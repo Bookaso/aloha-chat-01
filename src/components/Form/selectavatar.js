@@ -1,33 +1,30 @@
-import React, { useState,useEffect,useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import styled from "styled-components";
 import { Image } from "semantic-ui-react";
-import { UserContext } from "../../Context/usercontext"
+import { UserContext } from "../../Context/usercontext";
 
 const SelectionAvatar = (props) => {
   const [show, setShow] = useState(false);
   const [state, dispath] = useContext(UserContext);
   const num = Math.floor(Math.random() * 20);
 
-
   function popup() {
     setShow((prevState) => !prevState);
   }
   function selectedAvatar(index) {
     dispath({
-      type:"SETAVATAR",
-      payload:{photoURL:state.images[index]}
-    })
+      type: "SETAVATAR",
+      payload: { photoURL: state.images[index] },
+    });
     setShow((prevState) => !prevState);
   }
 
-
-  useEffect(()=>{
-
+  useEffect(() => {
     dispath({
-      type:"SETAVATAR",
-      payload:{photoURL:state.images[num]}
-    })
-  },[])
+      type: "SETAVATAR",
+      payload: { photoURL: state.images[num] },
+    });
+  }, []);
 
   return (
     <>
@@ -94,11 +91,11 @@ const CloseBtn = styled.button`
   margin-bottom: 2rem;
   position: sticky;
   z-index: 500;
-  font-family: 'Ubuntu';
+  font-family: "Ubuntu";
 `;
 const OpenBtn = styled.button`
   position: relative;
-  font-family: 'Ubuntu';
+  font-family: "Ubuntu";
   left: 5rem;
   bottom: 3rem;
   width: 4rem;

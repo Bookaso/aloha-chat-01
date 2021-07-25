@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useContext } from "react";
 import styled from "styled-components";
-import { useHistory } from 'react-router-dom'
+import { useHistory } from "react-router-dom";
 import { UserContext } from "../Context/usercontext";
 import firestore from "../database/firebase";
 import { Card, Button, Image } from "semantic-ui-react";
@@ -16,14 +16,13 @@ const Adduser = () => {
     setUser(null);
     const userRef = firestore.collection("users");
     const queryuser = userRef
-      // .where("pin", "!=", state.user.pin)
       .where("pin", "==", pin);
     queryuser.get().then((querysnapshot) => {
       querysnapshot.forEach((doc) => {
         console.log(doc.data());
         if (doc.exists) {
           setUser(() => doc.data());
-        } 
+        }
       });
     });
     setPin("");
@@ -33,21 +32,21 @@ const Adduser = () => {
     console.log(state.user.userId);
     const userRef = firestore.collection("users").doc(state.user.userId);
     const query = userRef.collection("friends");
-    query.doc(user.userId)
-        .set(user)
-    // userRef.update({ addedusers: [...state.user.addedusers,{user,messages:[], isaccepted:false}] })
-    .then(() => {
+    query
+      .doc(user.userId)
+      .set(user)
+      .then(() => {
         console.log("Added");
         const foundRef = firestore.collection("users").doc(user.userId);
         const query1 = foundRef.collection("friends");
-        query1.doc(state.user.userId)
-        .set(state.user)
-        // foundRef.update({ addedusers: [...user.addedusers,{user:state.user,messages:[], isaccepted:false}] })
-        .then(()=>{
-          console.log("Added to founded");
-          history.goBack();
-        })
-    })
+        query1
+          .doc(state.user.userId)
+          .set(state.user)
+          .then(() => {
+            console.log("Added to founded");
+            history.goBack();
+          });
+      });
   }
 
   function handleDelte() {

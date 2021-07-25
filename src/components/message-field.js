@@ -15,13 +15,13 @@ const MessageText = (props) => {
     }
   }
 
-  useEffect(()=>{
-    inputBox.current.addEventListener("keydown",((e)=>{
+  useEffect(() => {
+    inputBox.current.addEventListener("keydown", (e) => {
       if (e.keyCode === 13 && !e.shiftKey) {
         e.preventDefault();
       }
-    }))
-  },[])
+    });
+  }, []);
   return (
     <InputContainer>
       {isFocus ? (
@@ -60,10 +60,8 @@ const InputText = styled.textarea`
   outline: none;
   font-family: "Ubuntu";
   border: none;
-  /* border-radius: 20px; */
   overflow: auto;
   font-size: 1.2em;
-  /* padding: 5px; */
 `;
 
 const InputContainer = styled.div`

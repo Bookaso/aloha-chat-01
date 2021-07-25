@@ -1,15 +1,37 @@
 import React, { useContext, useState } from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useHistory } from "react-router-dom";
-import { Image, Popup, Icon, Card } from "semantic-ui-react";
+import { useHistory, useLocation } from "react-router-dom";
+import { Image, Popup, Icon, Card, Button } from "semantic-ui-react";
 import { UserContext } from "../Context/usercontext";
+
 const MessageHeader = () => {
   let history = useHistory();
+  let location = useLocation();
   const [state, dispath] = useContext(UserContext);
   const [isClick, setIsClick] = useState(false);
+
   function goBack() {
     history.goBack();
+  }
+
+  function logout() {
+    dispath({
+      type: "Logout",
+    });
+    history.replace("/login");
+  }
+
+  function showBackIcon() {
+    if (location.pathname.includes("chat")) {
+      return (
+        <Back onClick={goBack}>
+          <BackIcon icon="arrow-circle-left" />
+          BACK
+        </Back>
+      );
+    }
+    return null;
   }
   const InfoCard = () => {
     return (
@@ -19,6 +41,9 @@ const MessageHeader = () => {
           <Card.Header>{state.user.userName}</Card.Header>
           <Card.Description>User Name: {state.user.userName}</Card.Description>
           <Card.Description>Invitation PIN: {state.user.pin}</Card.Description>
+          <Button color="red" size="mini" onClick={logout}>
+            Log Out
+          </Button>
         </Card.Content>
       </Card>
     );
@@ -44,10 +69,7 @@ const MessageHeader = () => {
           </Logo>
         }
       />
-      <Back onClick={goBack}>
-        <BackIcon icon="arrow-circle-left" />
-        BACK
-      </Back>
+      {showBackIcon()}
     </HeaderContainer>
   );
 };

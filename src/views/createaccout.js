@@ -1,25 +1,24 @@
 import React from "react";
-import { useHistory } from 'react-router-dom'
+import { useHistory } from "react-router-dom";
 import styled from "styled-components";
-
 
 import CreateForm from "../components/Form/form";
 import SelectAvatar from "../components/Form/selectavatar";
 
-const CreateAccout = (props) => {
+const CreateAccout = () => {
   let history = useHistory();
 
   function goToHome() {
-    history.replace("/")
+    history.replace("/");
   }
 
   return (
-        <CreatePage>
-        <h2>Create Account</h2>
-          <SelectAvatar />
-          <CreateForm />
-          <EnterBtn onClick={goToHome}>Home</EnterBtn>
-        </CreatePage>
+    <CreatePage>
+      <h2>Create Account</h2>
+      <SelectAvatar />
+      <CreateForm />
+      <EnterBtn onClick={goToHome}>Home</EnterBtn>
+    </CreatePage>
   );
 };
 

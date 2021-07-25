@@ -15,22 +15,19 @@ const Userlist = (props) => {
   }
 
   function getToChat(user) {
-    props.getToChat(user)
+    props.getToChat(user);
   }
 
   useEffect(() => {
     let tempLists = [];
     const userRef = firestore.collection(`users/${state.user.userId}/friends`);
-    userRef
-    .onSnapshot((querysnapshot)=>{
-        querysnapshot.forEach((doc) => {
-          tempLists = [...tempLists,doc.data()];
-        })
-        setUsers(tempLists);
-        setLoadind(false);
-    }) 
-    // .then(()=>{
-    // })
+    userRef.onSnapshot((querysnapshot) => {
+      querysnapshot.forEach((doc) => {
+        tempLists = [...tempLists, doc.data()];
+      });
+      setUsers(tempLists);
+      setLoadind(false);
+    });
   }, [loading]);
   return (
     <UserContainer>
@@ -38,22 +35,22 @@ const Userlist = (props) => {
         <Input size="mini" placeholder="Search..." />
         <AddIcon icon="user-plus" onClick={handleItemClick} />
       </Topsection>
-      <ListConstainer
-        selection
-        divided
-        verticalAlign="middle"
-        size="massive"
-      >
+      <ListConstainer selection divided verticalAlign="middle" size="massive">
         {!loading
           ? users.map((user) => {
               return (
-                <ListConstainer.Item key={user.userId} onClick={()=>getToChat(user)} >
+                <ListConstainer.Item
+                  key={user.userId}
+                  onClick={() => getToChat(user)}
+                >
                   <ListConstainer.Content floated="right">
-                  <Button>Friend</Button>
+                    <Button>Friend</Button>
                   </ListConstainer.Content>
                   <Image avatar src={user.photoURL} />
                   <ListConstainer.Content>
-                  <ListConstainer.Header>{user.userName}</ListConstainer.Header>
+                    <ListConstainer.Header>
+                      {user.userName}
+                    </ListConstainer.Header>
                   </ListConstainer.Content>
                 </ListConstainer.Item>
               );

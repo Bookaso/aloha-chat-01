@@ -20,6 +20,7 @@ const Userlist = (props) => {
 
   useEffect(() => {
     let tempLists = [];
+    setUsers([]);
     const userRef = firestore.collection(`users/${state.user.userId}/friends`);
     userRef.onSnapshot((querysnapshot) => {
       querysnapshot.forEach((doc) => {
